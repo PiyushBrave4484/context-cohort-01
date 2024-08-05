@@ -1,7 +1,8 @@
-# About this Repository
+# Project Details
 
-This repository contains the starter code and instructions for a research project. Participants in the research project are expected to complete a programming [assignment](/assignment.md).
+Welcome and thank you for being part of this research project. You are in Cohort 1 and you can find details on how to get started [here](https://crowdbotics.notion.site/Cohort-1-5db06b845fce4a2a95265e4c8cf4d5b8).
 
+Project requirements are located [here](https://crowdbotics.notion.site/Project-Requirements-c886f74c68a94098a1fd463c59471795?pvs=4).
 
 ## Project Structure
 
