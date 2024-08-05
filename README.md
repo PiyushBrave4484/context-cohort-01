@@ -1,3 +1,5 @@
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/crowdbotics-research-projects/context-cohort-01)
+
 # Project Details
 
 Welcome and thank you for being part of this research project. You are in Cohort 1 and you can find details on how to get started [here](https://crowdbotics.notion.site/Cohort-1-5db06b845fce4a2a95265e4c8cf4d5b8).
@@ -41,7 +43,7 @@ The repository is structured as a DevContainer and contains the following featur
 
 ### Github Codespaces on the Web
 
-Open the repository on Github as a Codespace.
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/crowdbotics-research-projects/context-cohort-01)
 
 ### Local Development
 
