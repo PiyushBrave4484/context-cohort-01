@@ -4,11 +4,9 @@ import os
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 from app.main import app
 from app.db.base import Base
 from app.db.session import get_db
-
 from .utils import create_user, login_user
 
 # Define a SQLite URL for testing

@@ -1,36 +1,19 @@
 import random
-from pydantic import BaseModel, ConfigDict, EmailStr
-from typing import Optional
-
-class UserCreate(BaseModel):
-    username: str
-    email: EmailStr
-    password: str
+from app.schemas.user import UserCreate
+from app.schemas.magazine import MagazineCreate
 
 
-class MagazineBase(BaseModel):
-    name: str
-    description: str
-    base_price: float
-    discount_quarterly: Optional[float] = None
-    discount_half_yearly: Optional[float] = None
-    discount_annual: Optional[float] = None
-
-
-class MagazineCreate(MagazineBase):
-    pass
-
-
-def create_user(client, base_username: str, base_email: str, password: str):
+def create_user(client, base_username: str, base_email: str, password: str) -> dict:
     unique_id = random.randint(1000, 9999)
     username = f"{base_username}{unique_id}"
     email = f"{base_email.split('@')[0]}{unique_id}@{base_email.split('@')[1]}"
     
     user_data = UserCreate(username=username, email=email, password=password)
     response = client.post("/users/register", json=user_data.model_dump())
+    user_id = response.json()["id"]
     assert response.status_code == 200, f"Response status code: {response.status_code}, Response body: {response.text}"
     print(f"Created user: {username}, {email}, {password}")
-    return username, email
+    return dict(username=username, email=email, user_id=user_id)
 
 
 def login_user(client, username: str, password: str):
@@ -39,24 +22,51 @@ def login_user(client, username: str, password: str):
     return response.json()["access_token"]
 
 
-def create_plan(client, headers):
-    response = client.post("/plans/", json={
-        "title": "Monthly",
-        "description": "Monthly subscription plan",
-        "renewal_period": 1
-    }, headers=headers)
-    assert response.status_code == 200, f"Response status code: {response.status_code}, Response body: {response.text}"
+def create_plan(
+    client,
+    headers,
+    title="Monthly",
+    description="Monthly subscription plan",
+    renewal_period=1,
+    discount=0.0,
+    tier=1,
+):
+    response = client.post(
+        "/plans/",
+        json={
+            "title": title,
+            "description": description,
+            "renewal_period": renewal_period,
+            "discount": discount,
+            "tier": tier,
+        },
+        headers=headers,
+    )
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code}, Response body: {response.text}"
     return response.json()
 
 
-def create_magazine(client, headers, name_suffix):
-    response = client.post("/magazines/", json={
-        "name": f"Tech Weekly {name_suffix}",
-        "description": "A weekly tech magazine",
-        "base_price": 5.0,
-        "discount_quarterly": 0.1,
-        "discount_half_yearly": 0.2,
-        "discount_annual": 0.3
-    }, headers=headers)
-    assert response.status_code == 200, f"Response status code: {response.status_code}, Response body: {response.text}"
+def create_magazine(client, headers, name_suffix, base_price=100):
+    magazine_data = MagazineCreate(
+        name=f"Magazine {name_suffix}",
+        description=f"Description {name_suffix}",
+        base_price=base_price,
+    )
+    response = client.post(
+        "/magazines/", json=magazine_data.model_dump(), headers=headers
+    )
+    assert (
+        response.status_code == 200
+    ), f"Response status code: {response.status_code}, Response body: {response.text}"
+    print(
+        f"Created magazine: Magazine {name_suffix}, Description {name_suffix}, {base_price}"
+    )
     return response.json()
+
+
+def generate_random_plan_name():
+    random_words = ["Silver", "Gold", "Platinum", "Diamond", "Titanium"]
+    random_suffix = random.randint(1000, 9999)
+    return f"{random.choice(random_words)} Plan {random_suffix}"
