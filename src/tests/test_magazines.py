@@ -2,16 +2,16 @@ import pytest
 from .utils import create_user, login_user, create_plan, create_magazine
 
 def test_create_magazine(client, unique_username, unique_email):
-    username, _ = create_user(client, unique_username, unique_email, "adminpassword")
+    username = create_user(client, unique_username, unique_email, "adminpassword")["username"]
     token = login_user(client, username, "adminpassword")
     headers = {"Authorization": f"Bearer {token}"}
     
     name_suffix = "create"
     response = create_magazine(client, headers, name_suffix)
-    assert response["name"] == f"Tech Weekly {name_suffix}"
+    assert response["name"] == f"Magazine {name_suffix}"
 
 def test_get_magazines(client, unique_username, unique_email):
-    username, _ = create_user(client, unique_username, unique_email, "adminpassword")
+    username = create_user(client, unique_username, unique_email, "adminpassword")["username"]
     token = login_user(client, username, "adminpassword")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -25,7 +25,7 @@ def test_get_magazines(client, unique_username, unique_email):
     assert len(magazines) > 0
 
 def test_update_magazine(client, unique_username, unique_email):
-    username, _ = create_user(client, unique_username, unique_email, "adminpassword")
+    username = create_user(client, unique_username, unique_email, "adminpassword")["username"]
     token = login_user(client, username, "adminpassword")
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -44,7 +44,7 @@ def test_update_magazine(client, unique_username, unique_email):
     assert response.json()["name"] == f"Updated Tech Weekly {name_suffix}"
 
 def test_delete_magazine(client, unique_username, unique_email):
-    username, _ = create_user(client, unique_username, unique_email, "adminpassword")
+    username = create_user(client, unique_username, unique_email, "adminpassword")["username"]
     token = login_user(client, username, "adminpassword")
     headers = {"Authorization": f"Bearer {token}"}
     
