@@ -29,7 +29,7 @@ jobs:
       with:
         test-name: "Run pytest"
         setup-command: "pip install --upgrade pip && pip install -r ${{ env.REQUIREMENTS }}"
-        command: "python -m pytest --tb=no -q ${{ env.TEST_DIR }} > /dev/null 2>&1 && echo 'passed' || echo 'failed'"
+        command: "python -m pytest --tb=no -q ${{ env.TEST_DIR }}"
         comparison-method: exact
         expected-output: "passed"
         timeout: 300
